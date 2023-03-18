@@ -6,6 +6,7 @@ Repository Embedded-Systems presents suggested solutions to tasks that had to be
 
   - [Project Setup](#project-setup)
   - [Task *A*](#task-a)
+  - [Task *B*](#task-b)
 
 ## Project Setup
 
@@ -54,19 +55,55 @@ The task is to turn on the selected LEDs available on the board. In the example 
 
 int main()
 {
+    // Enable the clock of port D of the GPIO
+    RCC->AHB1ENR |= RCC_AHB1ENR_GPIODEN;
+
+    // Set 12-15 pins as output
+    GPIOD->MODER |= GPIO_MODER_MODER12_0;
+    GPIOD->MODER |= GPIO_MODER_MODER13_0;
+    GPIOD->MODER |= GPIO_MODER_MODER14_0;
+    GPIOD->MODER |= GPIO_MODER_MODER15_0;
+
+    // Turn on LEDs
+    GPIOD->ODR |= GPIO_ODR_OD12;
+    GPIOD->ODR |= GPIO_ODR_OD13;
+    GPIOD->ODR |= GPIO_ODR_OD14;
+    GPIOD->ODR |= GPIO_ODR_OD15;
+}
+```
+## Task *B*
+
+The task is to blink selected LEDs available on the board using the system tick timer `SysTick`. The LED should be on for 1 second and then off for another second.
+
+```c
+#include "stm32f4xx.h"
+
+int main()
+{
 	// Enable the clock of port D of the GPIO
-	RCC->AHB1ENR |= RCC_AHB1ENR_GPIODEN; 
+	RCC->AHB1ENR |= RCC_AHB1ENR_GPIODEN;
 	
-	// Set 12-15 pins as output
+	// Set 12-15 pin as output
 	GPIOD->MODER |= GPIO_MODER_MODER12_0;
 	GPIOD->MODER |= GPIO_MODER_MODER13_0;
 	GPIOD->MODER |= GPIO_MODER_MODER14_0;
 	GPIOD->MODER |= GPIO_MODER_MODER15_0;
 	
-	// Turn on LEDs
-	GPIOD->ODR |= GPIO_ODR_OD12;
-	GPIOD->ODR |= GPIO_ODR_OD13;
-	GPIOD->ODR |= GPIO_ODR_OD14;
-	GPIOD->ODR |= GPIO_ODR_OD15;
+	// Enable SysTick
+	SysTick->CTRL |= SysTick_CTRL_ENABLE_Msk;
+
+	// Set SysTick LOAD
+	SysTick->LOAD = 2000000 - 1;
+	
+	while(1)
+	{
+		if(SysTick->CTRL & SysTick_CTRL_COUNTFLAG_Msk)
+		{
+			GPIOD->ODR ^= GPIO_ODR_OD12;
+			GPIOD->ODR ^= GPIO_ODR_OD13;
+			GPIOD->ODR ^= GPIO_ODR_OD14;
+			GPIOD->ODR ^= GPIO_ODR_OD15;
+		}
+	}
 }
 ```
