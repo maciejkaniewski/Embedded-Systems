@@ -130,7 +130,7 @@ The screenshot below shows the logical states of the output controlling one of t
 
 ## Task *C*
 
-The task is analogous to the previous one, but instead of checking the `COUNTFLAG` register, the code related to the change of the diode state should be implemented in the interrupt.
+The task is analogous to the previous one, but instead of checking the `COUNTFLAG` bit, the code related to the change of the diode state should be implemented in the interrupt.
 
 ```C
 #include "stm32f4xx.h"
