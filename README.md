@@ -191,7 +191,7 @@ int main()
 	// Enable the clock of port D of the GPIO
 	RCC->AHB1ENR |= RCC_AHB1ENR_GPIODEN;
 
-    // Set 12 pin as output
+        // Set 12 pin as output
 	GPIOD->MODER |= GPIO_MODER_MODER12_0;
 	
 	// Enable HSE clock
