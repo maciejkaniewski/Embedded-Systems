@@ -73,7 +73,19 @@ int main()
 ```
 ## Task *B*
 
-The task is to blink selected LEDs available on the board using the system tick timer `SysTick`. The LED should be on for 1 second and then off for another second.
+The task is to blink selected LEDs available on the board using the system tick timer `SysTick`. The LED should be on for 1 second and then off for another second. The documentation says that `SysTick` runs at the `HSI` frequency divided by 8. Thus, it is *16MHz/8 = 2MHz*. To calculate the value of the `LOAD` register, you can use the following formula:
+
+```
+SysTick->LOAD = System Clock x Delay Desired
+```
+
+Applying the above formula in our problem, we get:
+
+```
+SysTick->LOAD = 2MHz x 1s = 2 000 000
+```
+
+In the code, the obtained value should be reduced by 1, because the counting starts from zero.
 
 ```c
 #include "stm32f4xx.h"
@@ -83,17 +95,20 @@ int main()
 	// Enable the clock of port D of the GPIO
 	RCC->AHB1ENR |= RCC_AHB1ENR_GPIODEN;
 	
-	// Set 12-15 pin as output
+	// Set 12-15 pins as output
 	GPIOD->MODER |= GPIO_MODER_MODER12_0;
 	GPIOD->MODER |= GPIO_MODER_MODER13_0;
 	GPIOD->MODER |= GPIO_MODER_MODER14_0;
 	GPIOD->MODER |= GPIO_MODER_MODER15_0;
 	
-	// Enable SysTick
-	SysTick->CTRL |= SysTick_CTRL_ENABLE_Msk;
-
 	// Set SysTick LOAD
 	SysTick->LOAD = 2000000 - 1;
+	
+	// Clear current value
+	SysTick->VAL = 0;
+	
+	// Enable SysTick
+	SysTick->CTRL |= SysTick_CTRL_ENABLE_Msk;
 	
 	while(1)
 	{
@@ -107,3 +122,7 @@ int main()
 	}
 }
 ```
+
+The screenshot below shows the logical states of the output controlling one of the four LEDs.
+
+![Logic](./images/img11.png "Logic States")
