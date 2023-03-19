@@ -9,6 +9,7 @@ Repository Embedded-Systems presents suggested solutions to tasks that had to be
   - [Task *B*](#task-b)
   - [Task *C*](#task-c)
   - [Task *D*](#task-d)
+  - [Task *E*](#task-e)
 
 ## Project Setup
 
@@ -226,3 +227,50 @@ int main()
 ```
 
 ![Logic](./images/img12.png "Logic States")
+
+## Task *E*
+
+Configure `PLL`.
+
+```C
+#include "stm32f4xx.h"
+
+int main()
+{
+	// Enable the clock of port D of the GPIO
+	RCC->AHB1ENR |= RCC_AHB1ENR_GPIODEN;
+	
+	// Set pin PD12 as output
+	GPIOD->MODER |= GPIO_MODER_MODER12_0;
+	
+	// Enable HSE clock
+	RCC->CR |= RCC_CR_HSEON_Msk;
+	while(!(RCC->CR & RCC_CR_HSERDY_Msk));
+	
+	// Set PLL source to HSE
+	RCC->PLLCFGR |= RCC_PLLCFGR_PLLSRC_HSE;
+	
+	// Set PLLM divider to 4 so 8MHz/4 = 2MHz on VCO input
+	RCC->PLLCFGR &= ~(RCC_PLLCFGR_PLLM_Msk); // Clear PLLM
+	RCC->PLLCFGR |= RCC_PLLCFGR_PLLM_2; // Set divider to 4
+	
+	// Set PLLN multiplier to 168 so 2MHz * 168 = 336MHz on VCO output
+	RCC->PLLCFGR &= ~(RCC_PLLCFGR_PLLN_Msk); // Clear PLLN
+	RCC->PLLCFGR |= (168 << RCC_PLLCFGR_PLLN_Pos); // Set multipier to 168
+	
+	// Set PLLP divider to 2 so 336MHz/2 = 168MHz on PLL output
+	RCC->PLLCFGR &= ~(RCC_PLLCFGR_PLLP_Msk); // Clear PLLM - 00 is divider by 2
+	
+	// Enable PLL
+	RCC->CR |= RCC_CR_PLLON_Msk;
+	while(!(RCC->CR & RCC_CR_PLLRDY));
+	
+	GPIOD->ODR ^= GPIO_ODR_OD12;
+	
+	while(1)
+	{
+
+	}
+}
+
+```
