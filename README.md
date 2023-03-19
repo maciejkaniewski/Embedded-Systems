@@ -7,6 +7,7 @@ Repository Embedded-Systems presents suggested solutions to tasks that had to be
   - [Project Setup](#project-setup)
   - [Task *A*](#task-a)
   - [Task *B*](#task-b)
+  - [Task *C*](#task-c)
 
 ## Project Setup
 
@@ -73,7 +74,7 @@ int main()
 ```
 ## Task *B*
 
-The task is to blink selected LEDs available on the board using the system tick timer `SysTick`. The LED should be on for 1 second and then off for another second. The documentation says that `SysTick` runs at the `HSI` frequency divided by 8. Thus, it is *16MHz/8 = 2MHz*. To calculate the value of the `LOAD` register, you can use the following formula:
+The task is to blink selected LEDs available on the board using the system tick timer `SysTick`. The LED should be on for 1 second and then off for another second. To achieve this, you need to configure `SysTick` and check the status of the `COUNTFLAG` bit in `SysTick->CTRL` register. The documentation says that `SysTick` by default runs at the `HSI` frequency divided by 8. Thus, it is *16MHz/8 = 2MHz*. To calculate the value of the `LOAD` register, you can use the following formula:
 
 ```
 SysTick->LOAD = System Clock x Delay Desired
@@ -126,3 +127,48 @@ int main()
 The screenshot below shows the logical states of the output controlling one of the four LEDs.
 
 ![Logic](./images/img11.png "Logic States")
+
+## Task *C*
+
+The task is analogous to the previous one, but instead of checking the `COUNTFLAG` register, the code related to the change of the diode state should be implemented in the interrupt.
+
+```C
+#include "stm32f4xx.h"
+
+void SysTick_Handler(void)
+{
+	GPIOD->ODR ^= GPIO_ODR_OD12;
+	GPIOD->ODR ^= GPIO_ODR_OD13;
+	GPIOD->ODR ^= GPIO_ODR_OD14;
+	GPIOD->ODR ^= GPIO_ODR_OD15;
+}
+
+int main()
+{
+	// Enable the clock of port D of the GPIO
+	RCC->AHB1ENR |= RCC_AHB1ENR_GPIODEN; 
+	
+	// Set 12-15 pin as output
+	GPIOD->MODER |= GPIO_MODER_MODER12_0;
+	GPIOD->MODER |= GPIO_MODER_MODER13_0;
+	GPIOD->MODER |= GPIO_MODER_MODER14_0;
+	GPIOD->MODER |= GPIO_MODER_MODER15_0;
+	
+	// Set SysTick LOAD
+	SysTick->LOAD = 2000000 - 1;
+	
+	// Clear current value
+	SysTick->VAL = 0;
+	
+	// Enable SysTick
+	SysTick->CTRL |= SysTick_CTRL_ENABLE_Msk;
+	
+	// Enable SysTick interrupt
+	SysTick->CTRL |= SysTick_CTRL_TICKINT_Msk;
+
+	while(1)
+	{
+
+	}
+}
+```
