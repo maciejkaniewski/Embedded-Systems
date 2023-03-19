@@ -8,6 +8,7 @@ Repository Embedded-Systems presents suggested solutions to tasks that had to be
   - [Task *A*](#task-a)
   - [Task *B*](#task-b)
   - [Task *C*](#task-c)
+  - [Task *D*](#task-d)
 
 ## Project Setup
 
