@@ -5,11 +5,12 @@ Repository Embedded-Systems presents suggested solutions to tasks that had to be
 ## Table of Contents
 
   - [Project Setup](#project-setup)
-  - [Task *A*](#task-a)
-  - [Task *B*](#task-b)
-  - [Task *C*](#task-c)
-  - [Task *D*](#task-d)
-  - [Task *E*](#task-e)
+  - [Task *A*](#task-a) *(turn on LED)*
+  - [Task *B*](#task-b) *(blink LED with SysTick flag)*
+  - [Task *C*](#task-c) *(blink LED with SysTick interrupt)*
+  - [Task *D*](#task-d) *(configure HSE as system clock)*
+  - [Task *E*](#task-e) *(configure PLL)*
+  - [Task *F*](#task-f) *(configure TIM4 with interrupt)*
 
 ## Project Setup
 
