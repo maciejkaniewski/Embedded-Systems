@@ -11,6 +11,7 @@ Repository Embedded-Systems presents suggested solutions to tasks that had to be
   - [Task *D*](#task-d) *(configure HSE as system clock)*
   - [Task *E*](#task-e) *(configure PLL)*
   - [Task *F*](#task-f) *(configure TIM4 with interrupt)*
+  - [Task *G*](#task-g) *(configure TIM4 in PWM mode)*
 
 ## Project Setup
 
@@ -424,8 +425,7 @@ timer_frequency = (84MHz)/(20999+1)*(1999+1) = 2Hz
 #include "stm32f4xx.h"
 
 void ConfigurePllClock(unsigned char frequency);
-
-volatile uint32_t systickCounter = 0;
+void ConfigureTIM4(void);
 
 void TIM4_IRQHandler(void)
 {
@@ -438,7 +438,7 @@ void TIM4_IRQHandler(void)
 	GPIOD->ODR ^= GPIO_ODR_OD15;
 }
 
-void ConfigureTIM4()
+void ConfigureTIM4(void)
 {
 	// Set HPRE: AHB prescaler to 1
 	RCC->CFGR |= RCC_CFGR_HPRE_DIV1;

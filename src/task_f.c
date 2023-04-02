@@ -1,8 +1,7 @@
 #include "stm32f4xx.h"
 
 void ConfigurePllClock(unsigned char frequency);
-
-volatile uint32_t systickCounter = 0;
+void ConfigureTIM4(void);
 
 void TIM4_IRQHandler(void)
 {
@@ -15,7 +14,7 @@ void TIM4_IRQHandler(void)
 	GPIOD->ODR ^= GPIO_ODR_OD15;
 }
 
-void ConfigureTIM4()
+void ConfigureTIM4(void)
 {
 	// Set HPRE: AHB prescaler to 1
 	RCC->CFGR |= RCC_CFGR_HPRE_DIV1;
