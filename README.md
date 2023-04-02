@@ -231,7 +231,7 @@ int main()
 
 ## Task *E*
 
-Configure `PLL`. You can use `SystemCoreClockUpdate()` function to validate frequency of the clock. But if you want to get reliable results you have to change default value of `HSI_VALUE` constant in `system_stm32f4xx.c` file.
+Configure `PLL`. You can use `SystemCoreClockUpdate()` function to validate frequency of the clock. But if you want to get reliable results you have to change default value of `HSE_VALUE` constant in `system_stm32f4xx.c` file.
 
 Defualt configuration:
 
@@ -286,7 +286,7 @@ void ConfigurePllClock(unsigned char frequency)
 	RCC->CR |= RCC_CR_HSEON;    				
 	while(!(RCC->CR & RCC_CR_HSERDY));
 
-	//Disable PLL
+	// Disable PLL
 	RCC->CR &= ~RCC_CR_PLLON;
 	
 	// Configure PLL 
@@ -306,7 +306,7 @@ void ConfigurePllClock(unsigned char frequency)
 	}
 	else if(frequency > 25)
 	{
-		// Set PLLN multiplier to frequency so 2MHz * frequency on VCO output
+		// Set PLLN multiplier to frequency so 2MHz * 2 * frequency on VCO output
 		RCC->PLLCFGR |= ((2*frequency) << RCC_PLLCFGR_PLLN_Pos);
 	
 		// Set PLLP divider to 4
@@ -314,7 +314,7 @@ void ConfigurePllClock(unsigned char frequency)
 	}
 	else
 	{
-		// Set PLLN multiplier to frequency so 2MHz * frequency on VCO output
+		// Set PLLN multiplier to frequency so 2MHz * 4 * frequency on VCO output
 		RCC->PLLCFGR |= ((4*frequency) << RCC_PLLCFGR_PLLN_Pos);
 	
 		// Set PLLP divider to 8
@@ -429,7 +429,7 @@ volatile uint32_t systickCounter = 0;
 
 void TIM4_IRQHandler(void)
 {
-	//Clear interrupt flag
+	// Clear interrupt flag
 	TIM4->SR &=~TIM_SR_UIF;
 
 	GPIOD->ODR ^= GPIO_ODR_OD12;
@@ -464,7 +464,7 @@ void ConfigureTIM4()
 	// Enable TIM4 interrupt
 	TIM4->DIER |= TIM_DIER_UIE;
 	
-	// Enable coutner
+	// Enable counter
 	TIM4->CR1 |= TIM_CR1_CEN;
 }
 
@@ -483,7 +483,7 @@ void ConfigurePllClock(unsigned char frequency)
 	RCC->CR |= RCC_CR_HSEON;    				
 	while(!(RCC->CR & RCC_CR_HSERDY));
 
-	//Disable PLL
+	// Disable PLL
 	RCC->CR &= ~RCC_CR_PLLON;
 	
 	// Configure PLL 
@@ -503,7 +503,7 @@ void ConfigurePllClock(unsigned char frequency)
 	}
 	else if(frequency > 25)
 	{
-		// Set PLLN multiplier to frequency so 2MHz * frequency on VCO output
+		// Set PLLN multiplier to frequency so 2MHz * 2 * frequency on VCO output
 		RCC->PLLCFGR |= ((2*frequency) << RCC_PLLCFGR_PLLN_Pos);
 	
 		// Set PLLP divider to 4
@@ -511,7 +511,7 @@ void ConfigurePllClock(unsigned char frequency)
 	}
 	else
 	{
-		// Set PLLN multiplier to frequency so 2MHz * frequency on VCO output
+		// Set PLLN multiplier to frequency so 2MHz * 4 * frequency on VCO output
 		RCC->PLLCFGR |= ((4*frequency) << RCC_PLLCFGR_PLLN_Pos);
 	
 		// Set PLLP divider to 8

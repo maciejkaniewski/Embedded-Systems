@@ -33,7 +33,7 @@ void ConfigurePllClock(unsigned char frequency)
 	RCC->CR |= RCC_CR_HSEON;    				
 	while(!(RCC->CR & RCC_CR_HSERDY));
 
-	//Disable PLL
+	// Disable PLL
 	RCC->CR &= ~RCC_CR_PLLON;
 	
 	// Configure PLL 
@@ -53,7 +53,7 @@ void ConfigurePllClock(unsigned char frequency)
 	}
 	else if(frequency > 25)
 	{
-		// Set PLLN multiplier to frequency so 2MHz * frequency on VCO output
+		// Set PLLN multiplier to frequency so 2MHz * 2 * frequency on VCO output
 		RCC->PLLCFGR |= ((2*frequency) << RCC_PLLCFGR_PLLN_Pos);
 	
 		// Set PLLP divider to 4
@@ -61,7 +61,7 @@ void ConfigurePllClock(unsigned char frequency)
 	}
 	else
 	{
-		// Set PLLN multiplier to frequency so 2MHz * frequency on VCO output
+		// Set PLLN multiplier to frequency so 2MHz * 4 * frequency on VCO output
 		RCC->PLLCFGR |= ((4*frequency) << RCC_PLLCFGR_PLLN_Pos);
 	
 		// Set PLLP divider to 8
