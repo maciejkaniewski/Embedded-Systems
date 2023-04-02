@@ -613,6 +613,8 @@ duty_channel_3 = ((75)/(100))*100 = 75%
 duty_channel_4 = ((100)/(100))*100 = 100%
 ```
 
+Below the fragment with the code, there are graphs of logical states of individual channels, confirming the calculated duty.
+
 ```C
 #include "stm32f4xx.h"
 
@@ -802,3 +804,8 @@ int main()
 	}
 }
 ```
+![LogicGreen](./images/img13.png "Logic States Green")
+![LogicOrange](./images/img14.png "Logic States Orange")
+![LogicRed](./images/img15.png "Logic States Red")
+![LogicBlue](./images/img16.png "Logic States Blue")
+
