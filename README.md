@@ -725,9 +725,9 @@ void ConfigurePllClock(unsigned char frequency)
 
 	// Configure flash latency 
 	FLASH->ACR &= ~(FLASH_ACR_LATENCY);
-	FLASH->ACR &= ~(FLASH_ACR_PRFTEN);
-	FLASH->ACR &= ~(FLASH_ACR_ICEN);
-	FLASH->ACR &= ~(FLASH_ACR_DCEN);
+	FLASH->ACR |= FLASH_ACR_PRFTEN;
+	FLASH->ACR |= FLASH_ACR_ICE;
+	FLASH->ACR |= FLASH_ACR_DCEN;
 	
 	if(frequency > 150)
 	{
